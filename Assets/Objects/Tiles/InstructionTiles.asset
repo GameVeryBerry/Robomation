@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 08a1978c56228bb47903f990a9c6ddf0, type: 3}
-  m_Name: Tiles
+  m_Name: InstructionTiles
   m_EditorClassIdentifier: 
   prefabs:
   - {fileID: 5122348811599427885, guid: d327b122a13717b4d912c9d5287d37d4, type: 3}
