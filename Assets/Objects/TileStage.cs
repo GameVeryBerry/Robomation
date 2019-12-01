@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using System;
 using System.Linq;
 using System.IO;
@@ -87,16 +88,31 @@ public class TileStage : MonoBehaviour
         }
     }
 
+    public float mapHeight;
     public Prefabs mapTiles;
     public string mapName = "sample";
     public StageData map;
+    GameObject[] mapObjects;
+
+    public byte selectedTile;
+    public int SelectedTile
+    {
+        set { selectedTile = (byte)value; }
+        get { return selectedTile; }
+    }
+
+    public void InitMap()
+    {
+        map = new StageData();
+        map.data.width = 64;
+        map.data.height = 64;
+        map.data.data = Enumerable.Repeat<byte>(0xff, map.data.width * map.data.height).ToArray();
+        SaveLoad.SaveBinary(map, mapName, SaveType.Map, (fs, data) => data.SaveMap(fs), overwrite: true);
+        LoadMap();
+    }
 
     public void SaveMap()
     {
-        map = new StageData();
-        map.data.width = 100;
-        map.data.height = 100;
-        map.data.data = new byte[100*100];
         SaveLoad.SaveBinary(map, mapName, SaveType.Map, (fs, data) => data.SaveMap(fs), overwrite: true);
     }
 
@@ -109,16 +125,47 @@ public class TileStage : MonoBehaviour
                 return data;
             return null;
         });
-        foreach (Transform child in transform)
-            Destroy(child.gameObject);
+        {
+            foreach (Transform child in transform)
+                Destroy(child.gameObject);
+            mapObjects = new GameObject[0];
+        }
         if (map != null)
+        {
+            mapObjects = new GameObject[map.data.width * map.data.height];
             for (int iy = 0; iy < map.data.height; iy++)
                 for (int ix = 0; ix < map.data.width; ix++)
-                {
-                    var id = map.data.data[ix + iy * map.data.width];
-                    var obj = Instantiate(mapTiles.prefabs[id], transform);
-                    obj.transform.localPosition = new Vector3(ix, 0, iy);
-                }
+                    UpdateTile(new Vector2Int(ix, iy));
+        }
+    }
+
+    public void SetTile(Vector2Int pos)
+    {
+        if (0 <= pos.x && pos.x < map.data.width && 0 <= pos.y && pos.y < map.data.height)
+        {
+            var index = pos.x + pos.y * map.data.width;
+            if (map.data.data[index] != selectedTile)
+            {
+                map.data.data[index] = selectedTile;
+                UpdateTile(pos);
+            }
+        }
+    }
+
+    private void UpdateTile(Vector2Int pos)
+    {
+        var index = pos.x + pos.y * map.data.width;
+        var tile = map.data.data[index];
+        Destroy(mapObjects[index]);
+        mapObjects[index] = null;
+
+        if (0 <= tile && tile < mapTiles.prefabs.Length)
+        {
+            var prefab = mapTiles.prefabs[tile];
+            var obj = Instantiate(prefab, transform);
+            obj.transform.localPosition = new Vector3(pos.x, 0, pos.y);
+            mapObjects[index] = obj;
+        }
     }
 
     // Start is called before the first frame update
@@ -132,6 +179,16 @@ public class TileStage : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject())
+        {
+            var plane = new Plane(Vector3.up, transform.position + Vector3.up * mapHeight);
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (plane.Raycast(ray, out float enter))
+            {
+                var cross = ray.GetPoint(enter);
+                var pos = new Vector2Int(Mathf.RoundToInt(cross.x), Mathf.RoundToInt(cross.z));
+                SetTile(pos);
+            }
+        }
     }
 }
