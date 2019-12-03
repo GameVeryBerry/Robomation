@@ -79,6 +79,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1120318239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6260830269934221360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b95d7de312a5240448035367fbc72f31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 1
+  tileStage: {fileID: 0}
 --- !u!1 &7705922624078011320
 GameObject:
   m_ObjectHideFlags: 0
@@ -168,7 +182,7 @@ PrefabInstance:
     - target: {fileID: 7185142148342355154, guid: 32920df4893746c448bc363c620a1559,
         type: 3}
       propertyPath: m_Name
-      value: RobotBase
+      value: Robot
       objectReference: {fileID: 0}
     - target: {fileID: 1436244850850221453, guid: 32920df4893746c448bc363c620a1559,
         type: 3}
@@ -232,6 +246,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32920df4893746c448bc363c620a1559, type: 3}
+--- !u!1 &6260830269934221360 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7185142148342355154, guid: 32920df4893746c448bc363c620a1559,
+    type: 3}
+  m_PrefabInstance: {fileID: 3842748345434189026}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2479920788517634878 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1674879000798851036, guid: 32920df4893746c448bc363c620a1559,

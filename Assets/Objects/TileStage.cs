@@ -86,6 +86,26 @@ public class TileStage : MonoBehaviour
             data = map;
             return true;
         }
+
+        public int GetIndex(Vector2Int pos)
+        {
+            return pos.x + pos.y * data.width;
+        }
+
+        public bool IsValid(Vector2Int pos)
+        {
+            return (0 <= pos.x && pos.x < data.width && 0 <= pos.y && pos.y < data.height);
+        }
+
+        public byte GetTile(int index)
+        {
+            return data.data[index];
+        }
+
+        public byte GetTile(Vector2Int pos)
+        {
+            return GetTile(GetIndex(pos));
+        }
     }
 
     public float mapHeight;
@@ -168,6 +188,36 @@ public class TileStage : MonoBehaviour
         }
     }
 
+    public Vector2Int WorldToTilePos(Vector3 pos)
+    {
+        return new Vector2Int(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.z));
+    }
+
+    public Vector3 TileToWorldPos(Vector2Int pos)
+    {
+        return new Vector3(pos.x, 0, pos.y);
+    }
+
+    public GameObject GetTileObject(Vector2Int pos)
+    {
+        if (map.IsValid(pos))
+            return mapObjects[map.GetIndex(pos)];
+        return null;
+    }
+
+    public Vector2Int? GetCursorTilePos()
+    {
+        var plane = new Plane(Vector3.up, transform.position + Vector3.up * mapHeight);
+        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (plane.Raycast(ray, out float enter))
+        {
+            var cross = ray.GetPoint(enter);
+            var pos = WorldToTilePos(cross);
+            return pos;
+        }
+        return null;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -181,14 +231,9 @@ public class TileStage : MonoBehaviour
     {
         if (Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject())
         {
-            var plane = new Plane(Vector3.up, transform.position + Vector3.up * mapHeight);
-            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (plane.Raycast(ray, out float enter))
-            {
-                var cross = ray.GetPoint(enter);
-                var pos = new Vector2Int(Mathf.RoundToInt(cross.x), Mathf.RoundToInt(cross.z));
-                SetTile(pos);
-            }
+            var pos = GetCursorTilePos();
+            if (pos.HasValue)
+                SetTile(pos.Value);
         }
     }
 }
