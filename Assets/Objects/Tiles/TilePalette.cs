@@ -24,7 +24,7 @@ public class TilePalette : MonoBehaviour
             obj.transform.localPosition = new Vector3(i / 4, i % 4, 0) * buttonSize;
             var rot = obj.transform.localEulerAngles;
             rot.z = meshRenderer.gameObject.transform.localEulerAngles.y;
-            obj.transform.localEulerAngles = rot;      
+            obj.transform.localEulerAngles = rot;
             i++;
 
         }
