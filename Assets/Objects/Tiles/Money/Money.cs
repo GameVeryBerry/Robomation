@@ -17,7 +17,7 @@ public class Money : MonoBehaviour
 
     }
     //お金の増加
-    public void AddMoney(int add)
+    public void AddMoney(int add = 1)
     {
         money += add;
     }

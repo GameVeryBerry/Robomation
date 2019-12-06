@@ -19,6 +19,7 @@ public class Delivery : MonoBehaviour, ITile
     }
     public void OnTileAction(RobotController robot)
     {
-        SceneManager.LoadScene("ResultScene");
+        Money MoneyClass = FindObjectOfType<Money>();
+        MoneyClass.AddMoney(500);
     }
 }
