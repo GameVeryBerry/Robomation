@@ -8,6 +8,7 @@ public class RobotController : MonoBehaviour
     float time = 0;
 
     public TileStage tileStage;
+    public TileStage floorTileStage;
     public Vector2Int currentPosition;
 
     public int direction = 0;
@@ -31,17 +32,18 @@ public class RobotController : MonoBehaviour
         if (time > duration)
         {
             time = 0;
-            if (tileStage.map.IsValid(currentPosition + forward[direction]))
+            var nextPos = currentPosition + forward[direction];
+            if (floorTileStage.map.IsValid(nextPos) && floorTileStage.map.GetTile(nextPos) != 0xff && tileStage.map.IsValid(nextPos))
             {
-                currentPosition += forward[direction];
+                currentPosition = nextPos;
+            }
 
-                var tile = tileStage.GetTileObject(currentPosition);
-                if (tile != null)
-                {
-                    var itile = tile.GetComponent<ITile>();
-                    if (itile != null)
-                        itile.OnTileAction(this);
-                }
+            var tile = tileStage.GetTileObject(currentPosition);
+            if (tile != null)
+            {
+                var itile = tile.GetComponent<ITile>();
+                if (itile != null)
+                    itile.OnTileAction(this);
             }
         }
 

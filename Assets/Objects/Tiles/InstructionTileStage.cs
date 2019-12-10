@@ -29,7 +29,7 @@ public class InstructionTileStage : MonoBehaviour
             {
                 if (floorStage.stage.map.IsValid(pos.Value))
                 {
-                    if (floorStage.stage.map.GetIndex(pos.Value) != 0xff)
+                    if (floorStage.stage.map.GetTile(pos.Value) != 0xff)
                         stage.SetTile(pos.Value);
                 }
             }
