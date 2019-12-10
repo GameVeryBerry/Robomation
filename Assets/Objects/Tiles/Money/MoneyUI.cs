@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class Delivery : MonoBehaviour, ITile
+public class MoneyUI : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -15,11 +14,7 @@ public class Delivery : MonoBehaviour, ITile
     // Update is called once per frame
     void Update()
     {
-        
-    }
-    public void OnTileAction(RobotController robot)
-    {
         Money MoneyClass = FindObjectOfType<Money>();
-        MoneyClass.AddMoney(500);
+        GetComponent<Text>().text = "お金:" + MoneyClass.money.ToString();
     }
 }
