@@ -8,7 +8,7 @@ public class RobotController : MonoBehaviour
     float time = 0;
 
     public TileStage tileStage;
-    Vector2Int currentPosition;
+    public Vector2Int currentPosition;
 
     public int direction = 0;
     readonly Vector2Int[] forward =

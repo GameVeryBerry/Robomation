@@ -9,10 +9,15 @@ public class TilePalette : MonoBehaviour
     public Prefabs prefabs;
     public GameObject buttonPrefabs;
     public Vector2 buttonSize;
+    CanvasGroup canvasGroup;
+    public bool canvasShown = false;
 
     // Start is called before the first frame update
     void Start()
     {
+        canvasGroup = GetComponent<CanvasGroup>();
+        SetCanvasGroupEnable(canvasShown);
+
         int i = 0;
         foreach (GameObject tilePrefab in prefabs.prefabs)
         {
@@ -21,7 +26,7 @@ public class TilePalette : MonoBehaviour
             var texture = meshRenderer.sharedMaterial.mainTexture;
             var sprite = Sprite.Create(texture.ToTexture2D(), new Rect(0, 0, texture.width, texture.height), Vector2.one / 2);
             obj.transform.Find("Image").GetComponent<Image>().sprite = sprite;
-            obj.transform.localPosition = new Vector3(i / 4, i % 4, 0) * buttonSize;
+            obj.transform.localPosition = new Vector3(-i / 4, i % 4, 0) * buttonSize;
             var rot = obj.transform.localEulerAngles;
             rot.z = meshRenderer.gameObject.transform.localEulerAngles.y;
             obj.transform.localEulerAngles = rot;
@@ -30,14 +35,8 @@ public class TilePalette : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-               
-    }
-
     //透明にする
-    private void SetCanvasGroupEnable(CanvasGroup canvasGroup, bool enable)
+    public void SetCanvasGroupEnable(bool enable)
     {
         if (enable)
         {
@@ -51,6 +50,11 @@ public class TilePalette : MonoBehaviour
             canvasGroup.interactable = false;
             canvasGroup.blocksRaycasts = false;
         }
+    }
+
+    public void ToggleCanvasGroupEnable()
+    {
+        SetCanvasGroupEnable(canvasShown = !canvasShown);
     }
 }
 
