@@ -4,16 +4,29 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    Camera cam;
+    Vector3 preMousePos;
+    public TileStage controlStage;
+
     // Start is called before the first frame update
     void Start()
     {
-        cam = Camera.main;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        var cursorPos = controlStage.GetCursorWorldPos();
+        if (cursorPos.HasValue)
+        {
+            if (Input.GetMouseButtonDown(2))
+            {
+                preMousePos = cursorPos.Value;
+            }
+            if (Input.GetMouseButton(2))
+            {
+                var diff = cursorPos.Value - preMousePos;
+                transform.Translate(-diff);
+            }
+        }
     }
 }

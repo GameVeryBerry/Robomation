@@ -102,16 +102,23 @@ public class TileStage : MonoBehaviour
         return null;
     }
 
-    public Vector2Int? GetCursorTilePos()
+    public Vector3? GetCursorWorldPos()
     {
         var plane = new Plane(Vector3.up, transform.position + Vector3.up * mapHeight);
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (plane.Raycast(ray, out float enter))
         {
             var cross = ray.GetPoint(enter);
-            var pos = WorldToTilePos(cross);
-            return pos;
+            return cross;
         }
+        return null;
+    }
+
+    public Vector2Int? GetCursorTilePos()
+    {
+        var cross = GetCursorWorldPos();
+        if (cross.HasValue)
+            return WorldToTilePos(cross.Value);
         return null;
     }
 }
