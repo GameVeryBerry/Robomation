@@ -7,6 +7,12 @@ public class CameraController : MonoBehaviour
     Vector3 preMousePos;
     public TileStage controlStage;
 
+    public Transform cameraZoomTransform;
+    public Transform cameraTransform;
+
+    public float zoomDistanceMin;
+    public float zoomDistanceMax;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,15 +24,19 @@ public class CameraController : MonoBehaviour
         var cursorPos = controlStage.GetCursorWorldPos();
         if (cursorPos.HasValue)
         {
-            if (Input.GetMouseButtonDown(2))
+            if (Input.GetMouseButtonDown(1))
             {
                 preMousePos = cursorPos.Value;
             }
-            if (Input.GetMouseButton(2))
+            if (Input.GetMouseButton(1))
             {
                 var diff = cursorPos.Value - preMousePos;
                 transform.Translate(-diff);
             }
         }
+
+        var pos = cameraTransform.localPosition;
+        pos.z = Mathf.Clamp(pos.z + Input.mouseScrollDelta.y, -zoomDistanceMax, -zoomDistanceMin);
+        cameraTransform.localPosition = pos;
     }
 }

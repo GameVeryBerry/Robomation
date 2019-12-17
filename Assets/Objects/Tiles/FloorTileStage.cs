@@ -21,7 +21,7 @@ public class FloorTileStage : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButton(1) && !EventSystem.current.IsPointerOverGameObject())
+        if (Input.GetMouseButton(2) && !EventSystem.current.IsPointerOverGameObject())
         {
             var pos = stage.GetCursorTilePos();
             if (pos.HasValue)
