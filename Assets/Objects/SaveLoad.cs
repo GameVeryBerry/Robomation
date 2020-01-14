@@ -12,9 +12,8 @@ using System.Text;
 public enum SaveType
 {
     //Add more types here
-    Map,
-    Match,
-    Options
+    Floor,
+    Instruction,
 }
 public static class SaveLoad
 {
@@ -26,26 +25,25 @@ public static class SaveLoad
     // Make more properites like this to easily access file names
     public static List<string> Maps
     {
-        get { return GetFilesOfType(SaveType.Map); }
+        get { return GetFilesOfType(SaveType.Floor); }
     }
-    
+
     //Points to User/AppData/LocalLow/DefaultCompany/YourGame/...
-    public static string dataPath = Application.persistentDataPath;
+    public static string dataPath = Application.dataPath;
+    public static string userDataPath = Application.persistentDataPath;
 
     // Add other directories here to indicate where you want to save
     public static Dictionary<SaveType, string> gameDirectories = new Dictionary<SaveType, string>
     {
-        {SaveType.Map, dataPath + "/maps/"},
-        {SaveType.Match, dataPath + "/matches/"},
-        {SaveType.Options, dataPath + "/options/"},
+        {SaveType.Floor, dataPath + "/floors/"},
+        {SaveType.Instruction, userDataPath + "/instructions/"},
     };
     
      // Add your file extensions here - they can be anything!
     public static Dictionary<SaveType, string> gameFileExtensions = new Dictionary<SaveType, string>
     {
-        {SaveType.Map, ".map"},
-        {SaveType.Match, ".match"},
-        {SaveType.Options, ".options"},
+        {SaveType.Floor, ".map"},
+        {SaveType.Instruction, ".map"},
     };
 
     // Call this at the start of your game if you want unity to make your directories for you to ensure they are there
@@ -120,7 +118,7 @@ public static class SaveLoad
     }
 
     // Call this to load the data of your game. highly recommend wrapping this call with JSON utility like so:
-    // YourSerializeableClass loadedObject = JsonUtility.FromJson<YourSerializeableClass>(SaveLoad.LoadData(nameOfThingToLoad, SaveType.Map));
+    // YourSerializeableClass loadedObject = JsonUtility.FromJson<YourSerializeableClass>(SaveLoad.LoadData(nameOfThingToLoad, SaveType.Floor));
     public static string LoadData(string nameOfFile, SaveType typeOfFile)
     {
         string file = FileName(nameOfFile, typeOfFile);

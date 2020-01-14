@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    private GameManager gameManager;
+
     Vector3 preMousePos;
-    public TileStage controlStage;
 
     public Transform cameraZoomTransform;
     public Transform cameraTransform;
@@ -16,12 +17,13 @@ public class CameraController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = GameManager.Get();
     }
 
     // Update is called once per frame
     void Update()
     {
-        var cursorPos = controlStage.GetCursorWorldPos();
+        var cursorPos = gameManager.FocusedStageObject.GetCursorWorldPos();
         if (cursorPos.HasValue)
         {
             if (Input.GetMouseButtonDown(1))

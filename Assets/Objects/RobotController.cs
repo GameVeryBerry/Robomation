@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class RobotController : MonoBehaviour
 {
+    private GameManager manager;
+
     public float duration = 1;
     float time = 0;
 
-    public TileStage tileStage;
-    public TileStage floorTileStage;
     public Vector2Int currentPosition;
 
     public int direction = 0;
@@ -23,6 +23,7 @@ public class RobotController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        manager = GameManager.Get();
     }
 
     // Update is called once per frame
@@ -33,12 +34,12 @@ public class RobotController : MonoBehaviour
         {
             time = 0;
             var nextPos = currentPosition + forward[direction];
-            if (floorTileStage.map.IsValid(nextPos) && floorTileStage.map.GetTile(nextPos) != 0xff && tileStage.map.IsValid(nextPos))
+            if (manager.floor.map.IsValid(nextPos) && manager.floor.map.GetTile(nextPos) != 0xff && manager.instruction.map.IsValid(nextPos))
             {
                 currentPosition = nextPos;
             }
 
-            var tile = tileStage.GetTileObject(currentPosition);
+            var tile = manager.instruction.GetTileObject(currentPosition);
             if (tile != null)
             {
                 var itile = tile.GetComponent<ITile>();
@@ -47,6 +48,6 @@ public class RobotController : MonoBehaviour
             }
         }
 
-        transform.position = Vector3.Lerp(transform.position, tileStage.TileToWorldPos(currentPosition), .2f);
+        transform.position = Vector3.Lerp(transform.position, manager.instruction.TileToWorldPos(currentPosition), .2f);
     }
 }

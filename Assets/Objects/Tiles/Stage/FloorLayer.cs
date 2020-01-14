@@ -3,19 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class FloorTileStage : MonoBehaviour
+// 床レイヤー
+public class FloorLayer : MonoBehaviour
 {
-    [HideInInspector]
-    public TileStage stage;
+    private GameManager manager;
 
     // Start is called before the first frame update
     void Start()
     {
-        stage = GetComponent<TileStage>();
-
-        SaveLoad.CreateGameDirectories();
-
-        stage.LoadMap();
+        manager = GameManager.Get();
     }
 
     // Update is called once per frame
@@ -23,9 +19,9 @@ public class FloorTileStage : MonoBehaviour
     {
         if (Input.GetMouseButton(2) && !EventSystem.current.IsPointerOverGameObject())
         {
-            var pos = stage.GetCursorTilePos();
+            var pos = manager.instruction.GetCursorTilePos();
             if (pos.HasValue)
-                stage.SetTile(pos.Value);
+                manager.instruction.SetTile(pos.Value);
         }
     }
 }

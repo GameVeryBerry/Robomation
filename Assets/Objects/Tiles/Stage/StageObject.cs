@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class TileStage : MonoBehaviour
+public class StageObject : MonoBehaviour
 {
     public float mapHeight;
     public Prefabs mapTiles;
-    public string mapName = "sample";
     public StageData map;
     GameObject[] mapObjects;
 
@@ -18,30 +17,8 @@ public class TileStage : MonoBehaviour
         get { return selectedTile; }
     }
 
-    public void InitMap()
+    public void UpdateMap()
     {
-        map = new StageData();
-        map.data.width = 64;
-        map.data.height = 64;
-        map.data.data = Enumerable.Repeat<byte>(0xff, map.data.width * map.data.height).ToArray();
-        SaveLoad.SaveBinary(map, mapName, SaveType.Map, (fs, data) => data.SaveMap(fs), overwrite: true);
-        LoadMap();
-    }
-
-    public void SaveMap()
-    {
-        SaveLoad.SaveBinary(map, mapName, SaveType.Map, (fs, data) => data.SaveMap(fs), overwrite: true);
-    }
-
-    public void LoadMap()
-    {
-        map = SaveLoad.LoadBinary(mapName, SaveType.Map, fs =>
-        {
-            var data = new StageData();
-            if (data.LoadMap(fs))
-                return data;
-            return null;
-        });
         {
             foreach (Transform child in transform)
                 Destroy(child.gameObject);
